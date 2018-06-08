@@ -1,25 +1,12 @@
 import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
+import { Hello } from "./src/Hello";
 
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android:
-    "Double tap R on your keyboard to reload,\n" +
-    "Shake or press menu button for dev menu"
-});
-
-interface IPerson {
-  name: string;
-  age: number;
-}
-
-export default class App extends Component<IPerson> {
+export default class App extends Component<{}> {
   public render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>{this.props.name}</Text>
-        <Text style={styles.instructions}>To get started, edit App.tsx</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Hello name="World" enthusiasmLevel={1} />
       </View>
     );
   }
