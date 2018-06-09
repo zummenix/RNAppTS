@@ -4,9 +4,9 @@
     "jsx": "react-native",
     "noEmit": true,
     "moduleResolution": "node",
-    "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "strict": true,
     "lib": ["es2015"]
   },
   "exclude": [
