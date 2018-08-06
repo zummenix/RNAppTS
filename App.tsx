@@ -1,13 +1,28 @@
 import React, { Component } from "react";
+import { createStore, Store } from "redux";
+import { Provider } from "react-redux";
 import { Platform, StyleSheet, Text, View } from "react-native";
-import { Hello } from "./src/Hello";
+import { HelloConnected, reducer } from "./src/Hello";
+
+export class GlobalState {
+  public static initial(): GlobalState {
+    return { name: "Aleksey", enthusiasmLevel: 3 };
+  }
+
+  public name: string = "";
+  public enthusiasmLevel: number = 0;
+}
+
+const store: Store<GlobalState> = createStore(reducer);
 
 export default class App extends Component<{}> {
   public render() {
     return (
-      <View style={styles.container}>
-        <Hello name="World" enthusiasmLevel={1} />
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          <HelloConnected />
+        </View>
+      </Provider>
     );
   }
 }

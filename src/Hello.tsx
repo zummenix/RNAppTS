@@ -1,58 +1,84 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import { createStandardAction, getType } from "typesafe-actions";
+import { Action, Dispatch } from "redux";
+import { GlobalState } from "../App";
+import { connect } from "react-redux";
 
-export interface IProps {
-  name: string;
-  enthusiasmLevel?: number;
-  onIncrement?: () => void;
-  onDecrement?: () => void;
+const increment = createStandardAction("increment")();
+const decrement = createStandardAction("decrement")();
+
+export function reducer(
+  state: GlobalState = GlobalState.initial(),
+  action: Action
+): GlobalState {
+  switch (action.type) {
+    case getType(increment):
+      return {
+        ...state,
+        enthusiasmLevel: Math.min(20, state.enthusiasmLevel + 1)
+      };
+    case getType(decrement):
+      return {
+        ...state,
+        enthusiasmLevel: Math.max(0, state.enthusiasmLevel - 1)
+      };
+    default:
+      return state;
+  }
 }
 
-interface IState {
+function mapDispatchToProps(dispatch: Dispatch): IDispatchProps {
+  return {
+    onIncrement: () => {
+      dispatch(increment());
+    },
+    onDecrement: () => {
+      dispatch(decrement());
+    }
+  };
+}
+
+function mapStateToProps(state: GlobalState): IProps {
+  return { name: state.name, enthusiasmLevel: state.enthusiasmLevel };
+}
+
+interface IProps {
+  name: string;
   enthusiasmLevel: number;
 }
 
-export class Hello extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { enthusiasmLevel: props.enthusiasmLevel || 0 };
-  }
+interface IDispatchProps {
+  onIncrement: () => void;
+  onDecrement: () => void;
+}
 
+class Hello extends React.Component<IProps & IDispatchProps, {}> {
   public render() {
     return (
       <View style={styles.root}>
         <Text style={styles.greeting}>
           {greeting(
             this.props.name,
-            exclamationMarks(this.state.enthusiasmLevel)
+            exclamationMarks(this.props.enthusiasmLevel)
           )}
         </Text>
         <View style={styles.buttons}>
           <View style={styles.button}>
-            <Button title="-" onPress={this.onDecrement} color="red" />
+            <Button title="-" onPress={this.props.onDecrement} color="red" />
           </View>
           <View style={styles.divider} />
           <View style={styles.button}>
-            <Button title="+" onPress={this.onIncrement} color="#31b4ea" />
+            <Button
+              title="+"
+              onPress={this.props.onIncrement}
+              color="#31b4ea"
+            />
           </View>
         </View>
       </View>
     );
   }
-
-  private onIncrement = () =>
-    this.setState({ enthusiasmLevel: increment(this.state.enthusiasmLevel) });
-
-  private onDecrement = () =>
-    this.setState({ enthusiasmLevel: decrement(this.state.enthusiasmLevel) });
-}
-
-function increment(n: number): number {
-  return Math.min(20, n + 1);
-}
-
-function decrement(n: number): number {
-  return Math.max(0, n - 1);
 }
 
 function greeting(name: string, suffix: string): string {
@@ -60,12 +86,17 @@ function greeting(name: string, suffix: string): string {
 }
 
 function exclamationMarks(numChars: number): string {
-  if (numChars < 0) {
+  if (numChars <= 0) {
     return "";
   } else {
-    return Array(numChars).join("!");
+    return Array(numChars + 1).join("!");
   }
 }
+
+export const HelloConnected = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Hello);
 
 const styles = StyleSheet.create({
   root: {
