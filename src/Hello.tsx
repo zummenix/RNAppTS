@@ -48,19 +48,11 @@ export class Hello extends React.Component<IProps, IState> {
 }
 
 function increment(n: number): number {
-  if (n + 1 >= 20) {
-    return 20;
-  } else {
-    return n + 1;
-  }
+  return Math.min(20, n + 1);
 }
 
 function decrement(n: number): number {
-  if (n - 1 < 0) {
-    return 0;
-  } else {
-    return n - 1;
-  }
+  return Math.max(0, n - 1);
 }
 
 function greeting(name: string, suffix: string): string {
