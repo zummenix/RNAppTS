@@ -2,14 +2,14 @@ import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { createStandardAction, getType } from "typesafe-actions";
 import { Action, Dispatch } from "redux";
-import { GlobalState } from "../App";
+import { GlobalState } from "./GlobalState";
 import { connect } from "react-redux";
 
 const increment = createStandardAction("increment")();
 const decrement = createStandardAction("decrement")();
 
 export function reducer(
-  state: GlobalState = GlobalState.initial(),
+  state: GlobalState = new GlobalState(),
   action: Action
 ): GlobalState {
   switch (action.type) {
@@ -28,21 +28,6 @@ export function reducer(
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch): IDispatchProps {
-  return {
-    onIncrement: () => {
-      dispatch(increment());
-    },
-    onDecrement: () => {
-      dispatch(decrement());
-    }
-  };
-}
-
-function mapStateToProps(state: GlobalState): IProps {
-  return { name: state.name, enthusiasmLevel: state.enthusiasmLevel };
-}
-
 interface IProps {
   name: string;
   enthusiasmLevel: number;
@@ -53,7 +38,7 @@ interface IDispatchProps {
   onDecrement: () => void;
 }
 
-class Component extends React.Component<IProps & IDispatchProps, {}> {
+class HelloScreen extends React.Component<IProps & IDispatchProps, {}> {
   public render() {
     return (
       <View style={styles.root}>
@@ -93,10 +78,25 @@ function exclamationMarks(numChars: number): string {
   }
 }
 
-export const Hello = connect(
+function mapDispatchToProps(dispatch: Dispatch): IDispatchProps {
+  return {
+    onIncrement: () => {
+      dispatch(increment());
+    },
+    onDecrement: () => {
+      dispatch(decrement());
+    }
+  };
+}
+
+function mapStateToProps(state: GlobalState): IProps {
+  return { name: state.name, enthusiasmLevel: state.enthusiasmLevel };
+}
+
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Component);
+)(HelloScreen);
 
 const styles = StyleSheet.create({
   root: {
