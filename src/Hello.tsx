@@ -53,7 +53,7 @@ interface IDispatchProps {
   onDecrement: () => void;
 }
 
-class Hello extends React.Component<IProps & IDispatchProps, {}> {
+class Component extends React.Component<IProps & IDispatchProps, {}> {
   public render() {
     return (
       <View style={styles.root}>
@@ -93,10 +93,10 @@ function exclamationMarks(numChars: number): string {
   }
 }
 
-export const HelloConnected = connect(
+export const Hello = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Hello);
+)(Component);
 
 const styles = StyleSheet.create({
   root: {

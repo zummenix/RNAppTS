@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { createStore, Store } from "redux";
 import { Provider } from "react-redux";
 import { Platform, StyleSheet, Text, View } from "react-native";
-import { HelloConnected, reducer } from "./src/Hello";
+import { Hello, reducer as helloReducer } from "./src/Hello";
 
 export class GlobalState {
   public static initial(): GlobalState {
@@ -13,14 +13,14 @@ export class GlobalState {
   public enthusiasmLevel: number = 0;
 }
 
-const store: Store<GlobalState> = createStore(reducer);
+const store: Store<GlobalState> = createStore(helloReducer);
 
 export default class App extends Component<{}> {
   public render() {
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          <HelloConnected />
+          <Hello />
         </View>
       </Provider>
     );
